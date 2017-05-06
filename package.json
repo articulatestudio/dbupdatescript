@@ -1,0 +1,13 @@
+{
+    "name": "tiptap",
+    "version": "0.0.1",
+    "description": "",
+    "dependencies": {
+        "websocket": "~1.0.24",
+        "httpdispatcher": "~2.0.1",
+        "mongodb": "~2.2.24",
+        "assert": "~1.4.1",
+        "cron": "~1.2.1",
+        "xml2js": "~0.4.17"
+    }
+}
