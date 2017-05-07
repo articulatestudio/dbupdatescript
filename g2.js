@@ -13,6 +13,7 @@ const oddsCollection = 'tiptap_odds';
 module.exports = {
   run() {
     // load
+    console.log("Run:");
     const promises = settings.xmlUrls.map(load);
     let finalData = {};
     Promise.all(promises)
@@ -49,10 +50,13 @@ module.exports = {
   }
 };
 function load(url) {
+  console.log(url);
   return loadData(url).then(parseData).catch(console.error);
 }
 //save data in db
 function storeData(db, data) {
+  console.log("storeData:");
+  console.log(data.tournaments);
   const options = { ordered: false };
   const ops = [
     db.collection(tournamentCollection).insertMany(data.tournaments, options),
@@ -61,12 +65,14 @@ function storeData(db, data) {
     db.collection(oddsCollection).insertMany(data.odds, options)
   ];
   return Promise.all(ops).then(() => {
+    console.log("insertMany done.");
     return db;
-  });
+  }).catch(console.error);
   return db;
 }
 //clean db
 function wipeDb(db) {
+  console.log("wipeDb:");
   const ops = [
     db.dropCollection(tournamentCollection).catch(() => {}),
     db.dropCollection(horsesCollection).catch(() => {}),
@@ -74,8 +80,9 @@ function wipeDb(db) {
     db.dropCollection(racesCollection).catch(() => {})
   ];
   return Promise.all(ops).then(() => {
+    console.log("Drop collection");
     return db;
-  });
+  }).catch(console.error);
 }
 // load data from xml to json
 function loadData(url) {
@@ -88,6 +95,7 @@ function loadData(url) {
             data += chunk;
           })
           .on('end', function() {
+            console.log('Data loaded OK');
             parseString(data, function(err, data) {
               if (err) throw err;
               resolve(data);
@@ -101,6 +109,7 @@ function loadData(url) {
 }
 
 function parseData(json) {
+  console.log("parseData:")
   if (
     json.hasOwnProperty('scores') && json.scores.hasOwnProperty('tournament')
   ) {
@@ -125,7 +134,7 @@ function parseData(json) {
           var activeRacesCount = 0;
 
           if (isActiveRace(race)) {
-            console.log('Saving race %d ', raceId);
+            //console.log('Saving race %d ', raceId);
             activeRacesCount++;
             racesToSave.push(getRace(race.$, tournamentId));
             oddsToSave = oddsToSave.concat(
@@ -135,19 +144,22 @@ function parseData(json) {
               getHorses(race.runners, tournamentId, raceId)
             );
           } else {
-            console.log('Race %d ', raceId, ' ended');
+            //console.log('Race %d ', raceId, ' ended');
           }
         }
         if (activeRacesCount == 0) {
         }
       }
     }
-    return {
+    var ret = {
       tournaments: tournamentsToSave,
       races: racesToSave,
       horses: horsesToSave,
       odds: oddsToSave
     };
+    //console.log("tournamentsToSave:");
+    //console.log(tournamentsToSave);
+    return ret;
   } else {
     console.log('not valid json schema');
     return {
@@ -227,6 +239,7 @@ function getOdds(oddsData, tournament_id, race_id, tournament_name, race_name) {
 }
 
 function getHorses(horsesList, tournamentId, raceId) {
+  //console.log("getHorses:");
   if (typeof horsesList != 'undefined') {
     horsesList = horsesList[0];
     const horses = [];
@@ -251,6 +264,7 @@ function getHorses(horsesList, tournamentId, raceId) {
           });
         }
       }
+      //console.log(horses);
       return horses;
     }
   } else {
