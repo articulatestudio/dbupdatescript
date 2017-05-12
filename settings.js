@@ -5,7 +5,6 @@ var settings = {
     "mongoUri": process.env.MONGODB_URI || "mongodb://heroku_1c3055cr:q3pqj2elcqj6n6g7dp64t29bt2@ds145659.mlab.com:45659/heroku_1c3055cr",
     "xmlUrls" : [
         "http://www.goalserve.com/getfeed/e2b9882859c64657bae5615d1a29026b/racing/uk",
-        "http://www.goalserve.com/getfeed/e2b9882859c64657bae5615d1a29026b/racing/uk_tomorrow"
     ],
     "dateOffset": 2
 };
