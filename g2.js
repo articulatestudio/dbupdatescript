@@ -59,9 +59,9 @@ function storeData(db, data) {
   console.log(data.tournaments);
   const options = { ordered: false };
   const ops = [
-    db.collection(tournamentCollection).insertMany(data.tournaments, options),
-    db.collection(racesCollection).insertMany(data.races, options),
-    db.collection(horsesCollection).insertMany(data.horses, options),
+    //db.collection(tournamentCollection).insertMany(data.tournaments, options),
+    //db.collection(racesCollection).insertMany(data.races, options),
+    //db.collection(horsesCollection).insertMany(data.horses, options),
     db.collection(oddsCollection).insertMany(data.odds, options)
   ];
   return Promise.all(ops).then(() => {
@@ -74,10 +74,10 @@ function storeData(db, data) {
 function wipeDb(db) {
   console.log("wipeDb:");
   const ops = [
-    db.dropCollection(tournamentCollection).catch(() => {}),
-    db.dropCollection(horsesCollection).catch(() => {}),
-    db.dropCollection(oddsCollection).catch(() => {}),
-    db.dropCollection(racesCollection).catch(() => {})
+    //db.dropCollection(tournamentCollection).catch(() => {}),
+    //db.dropCollection(horsesCollection).catch(() => {}),
+    //db.dropCollection(racesCollection).catch(() => {})
+    db.dropCollection(oddsCollection).catch(() => {})
   ];
   return Promise.all(ops).then(() => {
     console.log("Drop collection");
