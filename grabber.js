@@ -18,7 +18,7 @@ new CronJob(
 
 // Init cron to run grabber every minute
 new CronJob(
-  cronTime: '00 3- 03 * * * *',
+  cronTime: '00 30 03 * * *',
   onTick: function() {
     console.log('Starting task', Date());
     g3.run();
